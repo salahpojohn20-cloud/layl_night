@@ -1,0 +1,503 @@
+/* Base Styles & Variables */
+:root {
+    --bg-dark: #020111;
+    --bg-mid: #0a0b2e;
+    --bg-light: #1b1c4b;
+    --accent-blue: #4facfe;
+    --accent-glow: rgba(79, 172, 254, 0.6);
+    --text-white: #ffffff;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: linear-gradient(to bottom, var(--bg-dark), var(--bg-mid), var(--bg-light));
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--text-white);
+}
+
+/* Sky & Parallax Elements */
+#sky-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110vw;
+    height: 110vh;
+    z-index: 1;
+    pointer-events: none;
+    transition: transform 0.1s ease-out;
+    transform: translate(-5%, -5%);
+}
+
+#moon {
+    position: absolute;
+    top: 15%;
+    right: 20%;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff, #fdfcdc, #dcd9a3);
+    box-shadow: 0 0 50px 20px rgba(253, 252, 220, 0.4), 
+                0 0 100px 40px rgba(79, 172, 254, 0.2);
+    opacity: 0.2; /* Starts dim */
+    transition: opacity 3s ease, box-shadow 3s ease;
+}
+
+#moon.glowing {
+    opacity: 1;
+    box-shadow: 0 0 80px 30px rgba(253, 252, 220, 0.6), 
+                0 0 150px 60px rgba(79, 172, 254, 0.4);
+}
+
+/* Stars */
+.star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 4px #fff;
+}
+
+.star.twinkle {
+    animation: twinkle-anim linear infinite;
+}
+
+@keyframes twinkle-anim {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* Shooting Stars */
+.shooting-star {
+    position: absolute;
+    width: 120px;
+    height: 2px;
+    background: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,1));
+    border-radius: 50%;
+    transform: rotate(-45deg);
+    animation: shoot 2s linear forwards;
+    opacity: 0;
+}
+
+@keyframes shoot {
+    0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
+    100% { transform: translateX(-500px) translateY(500px) rotate(-45deg); opacity: 0; }
+}
+
+/* Mouse Glow */
+#mouse-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 400px;
+    height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(79, 172, 254, 0.15), transparent 70%);
+    pointer-events: none;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    transition: top 0.1s ease, left 0.1s ease;
+}
+
+/* Confetti */
+#confetti-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* UI Sections */
+.fullscreen-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: opacity 1.5s ease, visibility 1.5s ease, transform 1.5s ease;
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.95);
+}
+
+.intro-content {
+    text-align: center;
+    animation: float 4s ease-in-out infinite;
+}
+
+.main-title {
+    font-size: 4rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px var(--accent-glow);
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    font-weight: 200;
+    colorأهلاً بك. لقد قمت بتصميم وبرمجة المشروع بالكامل بناءً على طلبك، بدون أي أطر عمل (Frameworks)، وبدون أي أكواد ناقصة، ليعمل بشكل فوري واحترافي بمجرد فتحه. 
+
+يتميز الموقع بتصميم "Glassmorphism"، سماء ليلية تتضمن قمر متوهج، أكثر من 300 نجمة متحركة، شهب عشوائية، مؤثرات انتقال بين الصور (Fade & Scale)، وتأثير كتابة النصوص حرفاً حرفاً.
+
+إليك هيكل الملفات، انسخ الأكواد وضعها في الملفات المحددة:
+
+### 1. ملف `index.html`
+ضع هذا الكود في المسار الرئيسي للمشروع.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Layl Night 🌙</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Background Canvas for Stars & Shooting Stars -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Canvas for Confetti Effect -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Interactive Mouse Glow -->
+    <div id="mouse-glow"></div>
+
+    <!-- Glowing Moon -->
+    <div id="moon"></div>
+
+    <!-- Background Music -->
+    <!-- You can place your mp3 in the assets folder as 'music.mp3' -->
+    <audio id="bg-music" loop>
+        <source src="assets/music.mp3" type="audio/mpeg">
+    </audio>
+    <button id="music-toggle" class="floating-btn">🎵</button>
+
+    <!-- Intro Screen -->
+    <div id="intro-screen" class="screen full-screen">
+        <div class="intro-content">
+            <h1 class="title">Layl Night 🌙</h1>
+            <p class="subtitle">Tonight isn't just another night...</p>
+            <p class="subtitle">A little surprise is waiting for you.</p>
+            <button id="enter-btn" class="btn">Enter</button>
+        </div>
+    </div>
+
+    <!-- Main Content Screen -->
+    <div id="main-screen" class="screen hidden">
+        <div class="glass-card" id="main-card">
+            <h2 id="name-typing" class="typing-text"></h2>
+            <div id="romantic-text" class="fade-text">✨ Under the starlight, every moment with you is magic... ✨</div>
+
+            <div class="image-wrapper">
+                <img id="img1" src="[https://i.postimg.cc/8FwxyG7n/IMG-20260731-111716-154.jpg](https://i.postimg.cc/8FwxyG7n/IMG-20260731-111716-154.jpg)" alt="Memory 1" class="active">
+                <img id="img2" src="[https://i.postimg.cc/bGL46PZ6/IMG-20260731-111721-289.jpg](https://i.postimg.cc/bGL46PZ6/IMG-20260731-111721-289.jpg)" alt="Memory 2" class="inactive">
+            </div>
+
+            <div class="controls">
+                <button id="next-btn" class="btn">Next</button>
+                <button id="gift-btn" class="btn hidden">🎁 Open Your Gift</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Final Gift Screen -->
+    <div id="gift-screen" class="screen hidden">
+        <div class="glass-card gift-card">
+            <div class="gift-icon">🎁</div>
+            <p id="final-message" class="final-text" dir="rtl"></p>
+            <button id="replay-btn" class="btn hidden">Replay</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
+
+/* Google Fonts Import for Typography */
+@import url('[https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Cairo:wght@400;600&display=swap](https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Cairo:wght@400;600&display=swap)');
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: radial-gradient(circle at bottom, #04103A 0%, #02001F 40%, #000000 100%);
+    color: #ffffff;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Canvas Layers */
+#bg-canvas, #confetti-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+#confetti-canvas {
+    z-index: 50;
+}
+
+/* Glowing Moon */
+#moon {
+    position: absolute;
+    top: 15%;
+    right: 15%;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, #ffffff 30%, #e0eaff 80%);
+    border-radius: 50%;
+    box-shadow: 0 0 60px 10px rgba(255, 255, 255, 0.6), 0 0 120px 30px rgba(138, 180, 248, 0.4);
+    z-index: 1;
+    animation: moonPulse 4s infinite alternate ease-in-out;
+}
+
+@keyframes moonPulse {
+    0% { transform: scale(1); box-shadow: 0 0 60px 10px rgba(255, 255, 255, 0.6), 0 0 120px 30px rgba(138, 180, 248, 0.4); }
+    100% { transform: scale(1.05); box-shadow: 0 0 80px 15px rgba(255, 255, 255, 0.8), 0 0 150px 40px rgba(138, 180, 248, 0.6); }
+}
+
+/* Interactive Mouse Glow */
+#mouse-glow {
+    position: fixed;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(138, 180, 248, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    mix-blend-mode: screen;
+    transition: opacity 0.3s ease;
+}
+
+/* Screens */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    transition: opacity 1.5s ease, visibility 1.5s ease;
+}
+
+.screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Intro Screen */
+.intro-content {
+    text-align: center;
+    animation: float 6s infinite ease-in-out;
+}
+
+.title {
+    font-size: 4rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    background: linear-gradient(90deg, #fff, #8ab4f8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+    margin-bottom: 10px;
+    color: #d1e1ff;
+    letter-spacing: 1px;
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    transition: transform 0.3s ease-out;
+}
+
+.gift-card {
+    max-width: 650px;
+}
+
+/* Typography Inside Cards */
+.typing-text {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    height: 50px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.fade-text {
+    font-size: 1rem;
+    color: #b0c4de;
+    margin-bottom: 25px;
+    min-height: 24px;
+    transition: opacity 1s ease;
+}
+
+.final-text {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: #e0eaff;
+    text-align: right;
+    margin-bottom: 30px;
+    min-height: 250px;
+}
+
+/* Images & Transitions */
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.image-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.image-wrapper img.inactive {
+    opacity: 0;
+    transform: scale(1.1);
+}
+
+.image-wrapper img.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.gift-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: float 3s infinite ease-in-out;
+}
+
+/* Buttons */
+.btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    padding: 12px 35px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.btn:hover {
+    background: #ffffff;
+    color: #04103A;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    transform: translateY(-3px);
+}
+
+.btn.hidden {
+    display: none;
+}
+
+/* Floating Music Button */
+.floating-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.floating-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.1);
+}
+
+/* Keyframes */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .title { font-size: 3rem; }
+    .subtitle { font-size: 1rem; }
+    .glass-card { padding: 30px 20px; width: 95%; }
+    .typing-text { font-size: 2rem; }
+    .image-wrapper { height: 250px; }
+    .final-text { font-size: 1.05rem; }
+    #moon { width: 80px; height: 80px; top: 5%; right: 5%; }
+}
+
